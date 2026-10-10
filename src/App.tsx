@@ -23,9 +23,7 @@ function App() {
     from: '',
     to: '',
     date: '',
-    hour: '12',
-    minute: '00',
-    ampm: 'AM',
+    time: '8:00 AM',
     passengers: '1'
   })
 
@@ -36,7 +34,7 @@ function App() {
 
   const handleWhatsAppBooking = (e: React.FormEvent) => {
     e.preventDefault()
-    const message = `*Taxi Booking Request*\n\n*Name:* ${formData.name}\n*From:* ${formData.from}\n*To:* ${formData.to}\n*Date:* ${formData.date}\n*Time:* ${formData.hour}:${formData.minute} ${formData.ampm}\n*Passengers:* ${formData.passengers}`
+    const message = `*Taxi Booking Request*\n\n*Name:* ${formData.name}\n*From:* ${formData.from}\n*To:* ${formData.to}\n*Date:* ${formData.date}\n*Time:* ${formData.time}\n*Passengers:* ${formData.passengers}`
     const encodedMessage = encodeURIComponent(message)
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank')
   }
@@ -278,18 +276,13 @@ function App() {
                 </div>
                 <div className="form-group">
                   <label>Time</label>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <select name="hour" value={formData.hour} onChange={handleInputChange} required>
-                      {Array.from({ length: 12 }, (_, i) => i + 1).map(h => <option key={h} value={h.toString().padStart(2, '0')}>{h.toString().padStart(2, '0')}</option>)}
-                    </select>
-                    <select name="minute" value={formData.minute} onChange={handleInputChange} required>
-                      {['00', '15', '30', '45'].map(m => <option key={m} value={m}>{m}</option>)}
-                    </select>
-                    <select name="ampm" value={formData.ampm} onChange={handleInputChange} required>
-                      <option value="AM">AM</option>
-                      <option value="PM">PM</option>
-                    </select>
-                  </div>
+                  <select name="time" value={formData.time} onChange={handleInputChange} required>
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const hour = i % 12 === 0 ? 12 : i % 12;
+                      const ampm = i < 12 ? 'AM' : 'PM';
+                      return ['00', '30'].map(min => `${hour}:${min} ${ampm}`);
+                    }).flat().map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
                 </div>
                 <div className="form-group full-width">
                   <label>Passengers</label>
