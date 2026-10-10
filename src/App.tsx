@@ -23,7 +23,9 @@ function App() {
     from: '',
     to: '',
     date: '',
-    time: '',
+    hour: '12',
+    minute: '00',
+    ampm: 'AM',
     passengers: '1'
   })
 
@@ -34,7 +36,7 @@ function App() {
 
   const handleWhatsAppBooking = (e: React.FormEvent) => {
     e.preventDefault()
-    const message = `*Taxi Booking Request*\n\n*Name:* ${formData.name}\n*From:* ${formData.from}\n*To:* ${formData.to}\n*Date:* ${formData.date}\n*Time:* ${formData.time}\n*Passengers:* ${formData.passengers}`
+    const message = `*Taxi Booking Request*\n\n*Name:* ${formData.name}\n*From:* ${formData.from}\n*To:* ${formData.to}\n*Date:* ${formData.date}\n*Time:* ${formData.hour}:${formData.minute} ${formData.ampm}\n*Passengers:* ${formData.passengers}`
     const encodedMessage = encodeURIComponent(message)
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank')
   }
@@ -276,13 +278,18 @@ function App() {
                 </div>
                 <div className="form-group">
                   <label>Time</label>
-                  <input 
-                    type="time" 
-                    name="time" 
-                    required 
-                    value={formData.time}
-                    onChange={handleInputChange}
-                  />
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <select name="hour" value={formData.hour} onChange={handleInputChange} required>
+                      {Array.from({ length: 12 }, (_, i) => i + 1).map(h => <option key={h} value={h.toString().padStart(2, '0')}>{h.toString().padStart(2, '0')}</option>)}
+                    </select>
+                    <select name="minute" value={formData.minute} onChange={handleInputChange} required>
+                      {['00', '15', '30', '45'].map(m => <option key={m} value={m}>{m}</option>)}
+                    </select>
+                    <select name="ampm" value={formData.ampm} onChange={handleInputChange} required>
+                      <option value="AM">AM</option>
+                      <option value="PM">PM</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="form-group full-width">
                   <label>Passengers</label>
