@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/vallioor-taxi-website/',
   plugins: [react()],
   build: {
     rollupOptions: {
