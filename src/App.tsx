@@ -34,7 +34,11 @@ function App() {
 
   const handleWhatsAppBooking = (e: React.FormEvent) => {
     e.preventDefault()
-    const message = `*Taxi Booking Request*\n\n*Name:* ${formData.name}\n*From:* ${formData.from}\n*To:* ${formData.to}\n*Date:* ${formData.date}\n*Time:* ${formData.time}\n*Passengers:* ${formData.passengers}`
+    // Convert YYYY-MM-DD to DD/MM/YYYY
+    const [year, month, day] = formData.date.split('-')
+    const formattedDate = year ? `${day}/${month}/${year}` : formData.date
+    
+    const message = `*Taxi Booking Request*\n\n*Name:* ${formData.name}\n*From:* ${formData.from}\n*To:* ${formData.to}\n*Date:* ${formattedDate}\n*Time:* ${formData.time}\n*Passengers:* ${formData.passengers}`
     const encodedMessage = encodeURIComponent(message)
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank')
   }
